@@ -1,42 +1,57 @@
-# AuraVision: A Case for Automated Forensic Inspection
+<p align="center">
+  <img src="https://img.icons8.com/wired/128/007ACC/visual-search.png" width="80" />
+</p>
 
-### The Inspection Challenge
-Forensic engineering on existing structures often relies on manual, qualitative visual inspection. This introduces significant subjectivity—different engineers may categorize the same crack width or spalling severity differently. Furthermore, georeferencing these pathologies onto a 3D building model (BIM) is traditionally a slow, manual process.
+# <p align="center">AuraVision</p>
 
-### The AuraVision Solution
-**AuraVision** was developed to bridge this gap by automating the detection and quantification of structural pathologies using forensic-grade computer vision and LiDAR projection.
+<p align="center">
+  <strong>Forensic Computer Vision and Surface Analysis for Existing Structures.</strong><br>
+  Automated detection, segmentation, and volumetric repair estimation for structural pathologies.
+</p>
 
----
-
-### The Vision Detection Pipeline
-The engine (`/core/pathology_segmenter.py`) utilizes a multi-stage approach to isolate structural defects from surface noise:
-
-1. **Ridge Filtering**: Implementing multi-scale **Frangi** and **Hessian** filters to detect linear discontinuities (cracks) that are nearly invisible to the naked eye under poor lighting.
-2. **Morphological Cleanup**: Using skeletonization to find the "center-line" of a fracture, allowing for the calculation of an average physical width.
-3. **Severity Classification**: Automatically mapping detected area and density to **ASTM E2018** standards (Minor, Moderate, Critical).
-
-### Volumetric Estimation & Repair Forecasting
-Once a pathology is segmented, the `volume_engine.py` calculates the required material (Liters/m³) needed for repair. This is achieved by assuming standard repair depths for different spalling types, providing a high-fidelity procurement estimate directly from a site scan.
-
-### Project Roadmap & Experimental Lab
-- **`/lab`**: Contains benchmarking scripts for testing filter sensitivity under high-exposure site photos.
-- **Future Integration**: Real-time LiDAR fusion to project 2D masks onto 3D georeferenced point clouds.
+<p align="center">
+  <img src="https://img.shields.io/badge/Vision-OpenCV-007ACC?style=flat-square" />
+  <img src="https://img.shields.io/badge/Logic-Scikit_Image-007ACC?style=flat-square" />
+  <img src="https://img.shields.io/badge/Standards-ASTM_E2018-007ACC?style=flat-square" />
+  <img src="https://img.shields.io/badge/Status-Research_Prototype-444444?style=flat-square" />
+</p>
 
 ---
 
-## 🛠️ Getting Started
-AuraVision is a Python-based core engine with a FastAPI wrapper.
+## 🔍 Forensic Methodology
+AuraVision transforms the qualitative visual inspection process into a quantitative logic pipeline. By applying multi-scale ridge-detection filters, the engine isolates structural discontinuities (cracks) that are nearly invisible to the naked eye.
 
-```bash
-# 1. Setup
-pip install -r requirements.txt
+### Detection Pipeline
+- **Ridge Filtering**: Implementing **Frangi** and **Hessian** kernels to enhance linear fractures against surface noise.
+- **Morphological Segmentation**: Skeletonization to extract the "center-line" of detected pathologies for precise width calculation.
+- **Severity Mapping**: Automatically categorizing defects according to **ASTM E2018** benchmarks (Minor, Moderate, Critical).
 
-# 2. Test Detection
-python lab/test_ridge_filters.py
+## 🏗️ Internal Roadmap
 
-# 3. Launch Forensic API
-uvicorn api.main:app
+### 1. The Segmenter (`/core`)
+- **`pathology_segmenter.py`**: The vision kernel. Supports different detection modes for 'cracks' (ridges) and 'spalling' (blobs).
+- **`volume_engine.py`**: Calculates required repair materials (L/m³) based on segmented area and standard material depths.
+
+### 2. The Forensic Lab (`/lab`)
+- **`test_ridge_filters.py`**: Testing sensitivity thresholds under various site lighting exposures.
+
+---
+
+## 🚀 Usage
+
+```python
+from core.pathology_segmenter import PathologySegmenter
+
+# 1. Initialize Forensic Eye
+segmenter = PathologySegmenter(sensitivity=0.4, resolution_mm_px=0.5)
+
+# 2. Process Site Image
+result = segmenter.process_scan(img_array, pathology_type="crack")
+
+print(f"Pathology Severity: {result['metrics']['severity_score']}")
 ```
 
 ---
-*Developed by Maycon Alves | Advancing Building Technology and Structural Forensics.*
+<p align="center">
+  <i>Part of the <b>Nexus-Twin</b> Ecosystem | Engineering Strategy by <b>Maycon Alves</b></i>
+</p>
