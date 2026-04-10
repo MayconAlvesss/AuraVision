@@ -1,45 +1,42 @@
-# 👁️ AuraVision: Structural Pathology Intelligence
+# AuraVision: A Case for Automated Forensic Inspection
 
-**Automating Forensic Computer Vision and Surface Analysis for Existing Structures.**
+### The Inspection Challenge
+Forensic engineering on existing structures often relies on manual, qualitative visual inspection. This introduces significant subjectivity—different engineers may categorize the same crack width or spalling severity differently. Furthermore, georeferencing these pathologies onto a 3D building model (BIM) is traditionally a slow, manual process.
 
-AuraVision is a diagnostic engine built to detect, segment, and quantify structural pathologies (cracks, spalling, efflorescence) from raw site imagery and LiDAR scans. It transforms visual inspections from qualitative notes into quantitative, georeferenced engineering data.
-
----
-
-## 🔬 Forensic Methodology
-
-AuraVision utilizes a multi-stage vision pipeline optimized for concrete and masonry surfaces:
-
-1. **Ridge Detection**: Implementation of multi-scale Frangi and Hessian filters to isolate linear discontinuities (cracks) from surface noise.
-2. **Morphological Segmentation**: Cleaning extracted masks to remove non-structural artifacts.
-3. **Volumetric Mapping**: Projecting segmented 2D areas onto 3D georeferenced LiDAR planes to calculate exact repair volumes (Liters/m³).
+### The AuraVision Solution
+**AuraVision** was developed to bridge this gap by automating the detection and quantification of structural pathologies using forensic-grade computer vision and LiDAR projection.
 
 ---
 
-## 📂 Internal Roadmap
+### The Vision Detection Pipeline
+The engine (`/core/pathology_segmenter.py`) utilizes a multi-stage approach to isolate structural defects from surface noise:
 
-### Core Logic (`/core`)
-- **`pathology_segmenter.py`**: The vision kernel. *[WIP: Optimizing ridge thresholds for low-light site conditions]*.
-- **`volumetric_engine.py`**: Estimating material quantities based on standard repair depths (ASTM E2018).
+1. **Ridge Filtering**: Implementing multi-scale **Frangi** and **Hessian** filters to detect linear discontinuities (cracks) that are nearly invisible to the naked eye under poor lighting.
+2. **Morphological Cleanup**: Using skeletonization to find the "center-line" of a fracture, allowing for the calculation of an average physical width.
+3. **Severity Classification**: Automatically mapping detected area and density to **ASTM E2018** standards (Minor, Moderate, Critical).
 
-### Experimental Lab (`/lab`)
-- **`calibration_test.py`**: Benchmarking detection sensitivity under different exposure settings.
+### Volumetric Estimation & Repair Forecasting
+Once a pathology is segmented, the `volume_engine.py` calculates the required material (Liters/m³) needed for repair. This is achieved by assuming standard repair depths for different spalling types, providing a high-fidelity procurement estimate directly from a site scan.
 
----
-
-## ⚡ Technical Core
-Built on **Python 3.12**, leveraging **OpenCV**, **Scikit-Image**, and **NumPy**. The engine is designed to be headless, exposing a high-performance **FastAPI** interface for integration with mobile inspection apps.
-
----
-
-## 🛣️ 2028 Roadmap
-- [ ] **LiDAR-Fusion**: Real-time projection of detected pathologies onto SLAM-generated point clouds.
-- [ ] **Temporal Analysis**: Tracking crack propagation speeds over multiple inspection cycles.
-- [ ] **Reinforcement Exposure Detection**: Specialized CNN for identifying exposed rebar and corrosion levels.
+### Project Roadmap & Experimental Lab
+- **`/lab`**: Contains benchmarking scripts for testing filter sensitivity under high-exposure site photos.
+- **Future Integration**: Real-time LiDAR fusion to project 2D masks onto 3D georeferenced point clouds.
 
 ---
 
-<div align="center">
-  <i>Part of the <b>Nexus-Twin</b> Ecosystem</i><br>
-  Engineering Strategy & Implementation by **Maycon Alves**
-</div>
+## 🛠️ Getting Started
+AuraVision is a Python-based core engine with a FastAPI wrapper.
+
+```bash
+# 1. Setup
+pip install -r requirements.txt
+
+# 2. Test Detection
+python lab/test_ridge_filters.py
+
+# 3. Launch Forensic API
+uvicorn api.main:app
+```
+
+---
+*Developed by Maycon Alves | Advancing Building Technology and Structural Forensics.*
