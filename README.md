@@ -1,5 +1,7 @@
 # 👁️ AuraVision
 
+> **Status:** Concept (2028+)
+
 **Forensic Computer Vision & LiDAR Engine for Structural Inspection**
 
 AuraVision is a professional-grade forensic engine designed to automate the detection, segmentation, and volumetric analysis of structural pathologies. By integrating advanced ridge-detection algorithms with LiDAR georeferencing logic, it transforms raw site data into actionable repair diagnostics.
@@ -47,3 +49,4 @@ Designed to support forensic engineering workflows compliant with **ISO 13822** 
 
 ---
 *Developed by Maycon Alves for the NexusTwin Ecosystem.*
+
